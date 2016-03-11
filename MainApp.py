@@ -12,6 +12,8 @@ class MainUnit:
 	AlsaSoundEnabled=True
 	VoiceRecognitionEnabled=True
 	EspeakEnabled=True
+	#player="spotify"
+	player="banshee"
 
 
 
@@ -42,7 +44,7 @@ class MainUnit:
 			from WebGui import WebGui
 			self.Gui=WebGui()
 
-		self.MusicPlayer=MusicPlayer.MusicPlayer()
+		self.MusicPlayer=MusicPlayer.MusicPlayer(self.player)
 
 		if self.WhistleControlEnabled:
 			whistleDetector=WhistlingCommands.WhistlingDetector()

@@ -6,21 +6,37 @@ import alsaaudio
 
 
 class MusicPlayer:
+	def __init__(self,player):
+		self.player=player
+
+
 	def previous(self):
 		print("MPrev")
-		os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+		if (self.player=="spotify"):
+			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+		if self.player=="banshee":
+			os.system("banshee --previous&")
 
 	def play(self):
 		print("MPlay")
-		os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+		if (self.player=="spotify"):
+			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+		if self.player=="banshee":
+			os.system("banshee --toggle-playing&")
 
 	def nextsong(self):
 		print("Mnext")
-		os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+		if (self.player=="spotify"):
+			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+		if self.player=="banshee":
+			os.system("banshee --next&")
 
 	def stop(self):
 		print("mStop")
-		os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop")
+		if (self.player=="spotify"):
+			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop")
+		if self.player=="banshee":
+			os.system("banshee --pause&")
 
 
 	def louder(self):
@@ -46,7 +62,7 @@ class MusicPlayer:
 
 if __name__ == '__main__':
 	from  Tkinter import *
-	player=MusicPlayer()
+	player=MusicPlayer("banshee")
 	top = Tk()
 	B = Button(top, text ="<", command = player.previous)
 	B.pack(side=LEFT)
@@ -58,7 +74,7 @@ if __name__ == '__main__':
 	B.pack(side=LEFT)
 	B = Button(top, text ="-", command =  player.lower)
 	B.pack(side=LEFT)
-	B = Button(top, text ="X", command =  player.stopsong)
+	B = Button(top, text ="X", command =  player.stop)
 	B.pack(side=LEFT)
 # Code to add widgets will go here...
 	top.mainloop()
