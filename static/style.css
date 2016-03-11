@@ -1,0 +1,10 @@
+
+body {
+
+    background-repeat: repeat;    
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    
+    color: blue;
+}

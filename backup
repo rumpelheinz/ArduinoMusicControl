@@ -1,0 +1,173 @@
+import os
+import serial
+from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
+import time
+import dbus
+from flask.ext.socketio import SocketIO, emit
+import alsaaudio
+
+def play():
+    os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+def nextsong():
+    os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next")
+def previoussong():
+    os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous")
+def lower():
+    os.system("amixer sset Master  2+")
+def louder():
+    os.system("amixer sset Master  2-")
+
+
+
+from threading import Thread
+
+bus=dbus.SessionBus()
+restart=False
+artist=""
+title=""
+app = Flask(__name__)
+#Bootstrap(app)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app,async_mode='threading')
+global i
+i=0
+@app.route('/')
+def index():
+    print("tadaa")
+    return render_template('index.html')
+
+@socketio.on('my broadcast event', namespace='/test')
+def test_message(message):
+    print(message['data'])
+    print("espeak '"+message['data']+"'&")
+    os.system("espeak '"+message['data']+"'&")
+    emit('my response', {'data': message['data']}, broadcast=True)
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+	global artist,title
+	emit('music', {'data':artist+ " - "+title})
+	print(artist+ " - "+title)
+
+@socketio.on('mediabuttonevent', namespace='/test')
+def test_message(message):
+    print("mediabutton")
+    print(message['data'])
+    if (message['data']=="previous"):
+        previoussong()
+    elif (message['data']=="playpause"):
+        play()
+    elif (message['data']=="next"):
+        nextsong()
+    elif (message['data']=="louder"):
+        louder()
+    elif (message['data']=="lower"):
+        lower()
+class Listener(Thread):
+
+    def __init__(self):
+        Thread.__init__(self)
+
+    def run(self):
+        bus = dbus.SessionBus()
+        spotify_bus = bus.get_object("org.mpris.MediaPlayer2.spotify", "/org/mpris/MediaPlayer2")
+        properties_interface = dbus.Interface(spotify_bus, 'org.freedesktop.DBus.Properties')
+        global title
+        global artist
+        while(True):
+            info=properties_interface.Get('org.mpris.MediaPlayer2.Player', 'Metadata')
+            if (info is not None):
+                print(info)
+                newartist=str(unicode(info['xesam:artist'][0]).encode("utf-8"))
+                newtitle=str(unicode(info['xesam:title']).encode("utf-8"))
+                if (newtitle!=title):
+                    artist=newartist
+                    title=newtitle
+                    socketio.emit('music', {'data': newartist+" - "+newtitle}, namespace='/test')
+                    print({'data': newartist+" "+newtitle})
+
+            time.sleep(1)
+
+def tryConnect():
+	newSer=0
+	for i in range(0,9):
+		try:
+			newSer=serial.Serial('/dev/ttyUSB'+str(i),9600)
+			print ('/dev/ttyUSB'+str(i))
+			newSer.flushInput()
+			newSer.flushOutput()
+			time.sleep(0.1)
+			return newSer
+		except serial.serialutil.SerialException:
+			pass
+	for i in range(0,9):
+		try:
+			newSer=serial.Serial('/dev/ttyACM'+str(i),9600)
+			print ('/dev/ttyACM'+str(i))
+			newSer.flushInput()
+			newSer.flushOutput()
+			time.sleep(0.1)
+			return newSer
+		except serial.serialutil.SerialException:
+			pass
+	print "not connected"
+	time.sleep (2)
+	return 0
+
+
+class ArduinoReader(Thread):
+
+    def __init__(self):
+        Thread.__init__(self)
+
+    def run(self):
+        global title
+        global artist
+        ser=tryConnect()
+        while(True):
+            if (ser==0):
+                ser=tryConnect()
+                if (ser.inWaiting()>0):
+                    input=ser.readline()
+                    print(input)
+                    if (input=="start\r\n"):
+                        restart=True
+                    if (input=="a\r\n"):
+                        print("a")
+
+                    elif (input=="b\r\n"):
+                        print("b")
+                        if players.playerRunning():
+                            nextplayer=players.getPlayer()
+                            nextplayer.playpause_song()
+                        else:
+                            nextplayer=players.playerlist[1]
+                            nextplayer.start_song()
+                    elif (input=="c\r\n"):
+                        print("c")
+                        if players.playerRunning():
+                            nextplayer=players.getPlayer()
+                            nextplayer.next_song()
+
+                    elif (input=="d\r\n"):
+                        os.system("amixer sset 'Master' 5%+")
+                    elif (input=="e\r\n"):
+                        os.system("amixer sset 'Master' 5%-")
+
+
+
+
+            time.sleep(1)
+
+if __name__ == '__main__':
+    listenerThread=Listener()
+    listenerThread.start()
+    socketio.run(app,debug=False, host='0.0.0.0')
+    #socketio.run(app,debug=False)
+
+
+
+
+
+
