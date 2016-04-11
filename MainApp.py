@@ -5,15 +5,15 @@ class MainUnit:
 	print(__name__)
 
 	ArduinoEnabled=True
-	WhistleControlEnabled=True
+	WhistleControlEnabled=False
 	WebGuiEnabled=True
 	SpotifyEnabled=True
 	ListenerEnabled=True
 	AlsaSoundEnabled=True
-	VoiceRecognitionEnabled=True
+	VoiceRecognitionEnabled=False
 	EspeakEnabled=True
-	#player="spotify"
-	player="banshee"
+	player="spotify"
+	#player="banshee"
 
 
 
