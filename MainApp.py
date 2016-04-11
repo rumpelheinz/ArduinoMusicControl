@@ -66,9 +66,8 @@ class MainUnit:
 			arduinoReader.start()
 
 		if self.WebGuiEnabled:
-			print "starting gui"
+			print ("starting gui")
 			self.Gui.run(self)
-			print("after")
 
 	def getChanged(self):
 		return self.changed
@@ -167,6 +166,22 @@ class MainUnit:
 			print("here")
 			self.MusicPlayer.play()
 
+	def left(self):
+
+		print("Left room")
+		if self.EspeakEnabled:
+			os.system("espeak 'Left Room'&")
+			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop")
+
+
+	def entered (self):
+		print("Entered room")
+		if self.EspeakEnabled:
+			os.system("espeak 'Entered Room'&")
+			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play")
+
+
+
 	def nextsong(self):
 		print("Next")
 		if self.EspeakEnabled:
@@ -186,7 +201,6 @@ class MainUnit:
 
 
 
-print __name__
 if __name__ == '__main__':
 	programm=MainUnit()
 

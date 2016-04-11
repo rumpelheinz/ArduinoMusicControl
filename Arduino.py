@@ -23,7 +23,7 @@ def tryConnect():
 			newSer.flushOutput()
 			time.sleep(0.1)
 			return newSer
-		except serial.serialutil.SerialException:
+		except (serial.serialutil.SerialException):
 			pass
 	for i in range(0,9):
 		try:
@@ -33,7 +33,7 @@ def tryConnect():
 			newSer.flushOutput()
 			time.sleep(0.1)
 			return newSer
-		except serial.serialutil.SerialException:
+		except (serial.serialutil.SerialException):
 			pass
 	print ("Arduino not connected")
 	time.sleep (1)
@@ -62,7 +62,7 @@ class ArduinoReader(Thread):
 							try:
 								ser.write("title "+str(self.MainUnit.getTitle())+'\0')
 								ser.write("artist "+str(self.MainUnit.getArtist())+'\0')
-							except Exception,e:
+							except (Exception,e):
 								print (str(e))
 						if RepresentsInt(input):
 							lightvalue=min(max(0,int(input)),100)
@@ -78,7 +78,11 @@ class ArduinoReader(Thread):
 							self.MainUnit.louder()
 						elif (input=="e\r\n"):
 							self.MainUnit.lower()
-			except Exception, e:
-				print (str(e))
+						elif (input=="g\r\n"):
+							self.MainUnit.entered()
+						elif (input=="f\r\n"):
+							self.MainUnit.left();
+			except (Exception):
+				print (str(Exception))
 				ser=tryConnect()
 			time.sleep(0.2)
