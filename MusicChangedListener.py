@@ -19,9 +19,13 @@ class Listener(Thread):
 				properties_interface = dbus.Interface(spotify_bus, 'org.freedesktop.DBus.Properties')
 				while(True):
 					info=properties_interface.Get('org.mpris.MediaPlayer2.Player', 'Metadata')
+					try:
+						newartist=str(info['xesam:artist'][0].encode('ascii', 'ignore').decode('ascii'))
+						newtitle=str(info['xesam:title'].encode('utf-8', 'ignore').decode('utf-8'))
+					except (UnicodeEncodeError):
+						newartist=str(info['xesam:artist'][0].encode('utf-8'))
+						newtitle=str(info['xesam:title'].encode('utf-8'))
 
-					newartist=str(info['xesam:artist'][0].encode("utf-8"))
-					newtitle=str(info['xesam:title'].encode("utf-8"))
 
 
 					if (newtitle!=self.MainUnit.getTitle()):
@@ -30,11 +34,11 @@ class Listener(Thread):
 						self.MainUnit.setTitle(newtitle)
 						self.MainUnit.displayArtist(newartist+" - "+newtitle)
 					time.sleep(1)
-			except IndexError, e:
+			except (IndexError )as e:
 				print (str(e)+ ": Propably no song selected in Spotify.")
 				self.MainUnit.play()
 				time.sleep(2)
 
 			except DBusException :
-				print "DBusException : Spotify propably not open"
+				print ("DBusException : Spotify propably not open")
 				time.sleep(2)

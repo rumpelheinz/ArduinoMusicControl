@@ -3,7 +3,6 @@ from time import sleep
 
 import speech_recognition as sr
 
-import MainApp
 
 
 def RepresentsInt(s):
@@ -30,7 +29,7 @@ class Recognizerthread(Thread):
 			command=""
 			sound=-1;
 			for i in list:
-				print i
+				print (i)
 				if (i=="play" or i=="playing"):
 					command="play"
 				if (i=="next"):
@@ -95,7 +94,7 @@ class VoiceReader(Thread):
 							audio = r.listen(source,5)
 							break
 						except sr.WaitTimeoutError:
-							print "Retrying"
+							print ("Retrying")
 
 					print("Recognising sound")
 					Recognizerthread(self.MainApp,audio,r).start()
