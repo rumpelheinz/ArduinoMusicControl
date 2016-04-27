@@ -26,8 +26,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
-
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
 	@staticmethod
@@ -42,7 +40,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
@@ -58,8 +55,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
-
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
 	@staticmethod
@@ -74,7 +69,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
@@ -90,7 +84,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
@@ -106,7 +99,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
@@ -122,7 +114,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
@@ -138,7 +129,6 @@ class WebGui:
 			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
 		from random import randrange
 		random_index = randrange(0,len(text))
-		print text[random_index]
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
 
@@ -161,7 +151,6 @@ class WebGui:
 		title=WebGui.MainUnit.getTitle()
 		emit('music', {'data':artist+ " - "+title})
 		emit('volume', {'data':WebGui.MainUnit.getVolume()})
-		print(artist+ " - "+title)
 
 	@staticmethod
 	@mysocketio.on('mediabuttonevent', namespace='/test')

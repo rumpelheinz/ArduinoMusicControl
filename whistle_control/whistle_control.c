@@ -133,7 +133,8 @@ void fft_analyze(unsigned char *buf, int length) {
 		printf("%d\t%f\n", maxpos, max / oldmax);
 		if (maxpos > 30) {
 			remote_action("echo '1' >>outputfile.txt");
-			printf("testest\n");
+
+			printf("1\n");
 		}
 		fft_peak_analyze(maxpos);
 	}

@@ -57,7 +57,7 @@ class FileStreamReader(Thread):
 			self.lasthit=0
 			self.firsthit=0
 			if (duration<2):
-				print "to short"
+				print ("to short")
 				pass
 			elif (duration<4):
 				self.MainUnit.stop()
