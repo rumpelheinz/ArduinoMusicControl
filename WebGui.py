@@ -42,6 +42,36 @@ class WebGui:
 		random_index = randrange(0,len(text))
 
 		return render_template('index.html',int=mint,mstring=text[random_index])
+	
+	@staticmethod
+	@app.route('/LampOn', methods = ['GET', 'POST'])
+	def mLampOn():
+		print("LampOn")
+		WebGui.MainUnit.LampOn()
+		mint=int(round(random()*3))
+		text=["http://www.animateit.net/data/media/189/2peng1.gif",
+		"http://cdn.osxdaily.com/wp-content/uploads/2013/07/dancing-banana.gif",
+		"http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-1.gif",
+			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
+		from random import randrange
+		random_index = randrange(0,len(text))
+
+		return render_template('index.html',int=mint,mstring=text[random_index])
+
+	@staticmethod
+	@app.route('/LampOff', methods = ['GET', 'POST'])
+	def mLampOff():
+		print("LampOff")
+		WebGui.MainUnit.LampOff()
+		mint=int(round(random()*3))
+		text=["http://www.animateit.net/data/media/189/2peng1.gif",
+		"http://cdn.osxdaily.com/wp-content/uploads/2013/07/dancing-banana.gif",
+		"http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-1.gif",
+			  "http://bestanimations.com/Animals/Birds/Penguins/animated-penguin-gif-10.gif"]
+		from random import randrange
+		random_index = randrange(0,len(text))
+
+		return render_template('index.html',int=mint,mstring=text[random_index])
 
 	@staticmethod
 	@app.route('/Play')
@@ -167,6 +197,10 @@ class WebGui:
 			WebGui.MainUnit.louder()
 		elif (message['data']=="lower"):
 			WebGui.MainUnit.lower()
+		elif (message['data']=="LampOn"):
+			WebGui.MainUnit.LampOn()
+		elif (message['data']=="LampOff"):
+			WebGui.MainUnit.LampOff()
 
 	@staticmethod
 	def emitVolume(volume):

@@ -62,8 +62,8 @@ class MainUnit:
 			voiceThread.start()
 
 		if self.ArduinoEnabled:
-			arduinoReader=Arduino.ArduinoReader(self)
-			arduinoReader.start()
+			self.arduinoReader=Arduino.ArduinoReader(self)
+			self.arduinoReader.start()
 
 		if self.WebGuiEnabled:
 			print ("starting gui")
@@ -158,7 +158,6 @@ class MainUnit:
 			self.MusicPlayer.previous()
 
 	def play(self):
-
 		print("Toggle playing")
 		if self.EspeakEnabled:
 			os.system("espeak 'Toggle Playing'&")
@@ -167,7 +166,7 @@ class MainUnit:
 			self.MusicPlayer.play()
 
 	def left(self):
-
+		self.LampOff()
 		print("Left room")
 		if self.EspeakEnabled:
 			os.system("espeak 'Left Room'&")
@@ -177,6 +176,7 @@ class MainUnit:
 	def entered (self):
 		print("Entered room")
 		if self.EspeakEnabled:
+			self.LampOn()
 			os.system("espeak 'Entered Room'&")
 			os.system("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play")
 
@@ -198,8 +198,10 @@ class MainUnit:
 		print("Displaying:  "+NameAndArtist)
 		if self.WebGuiEnabled:
 			self.Gui.emitNameAndArtist(NameAndArtist)
-
-
+	def LampOn(self):
+		self.arduinoReader.on()
+	def LampOff(self):
+		self.arduinoReader.off()
 
 if __name__ == '__main__':
 	programm=MainUnit()

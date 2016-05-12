@@ -15,7 +15,8 @@ def RepresentsInt(s):
 
 def tryConnect():
 	newSer=0
-	for i in range(0,9):
+	"""
+	for i in range(1,9):
 		try:
 			newSer=serial.Serial('/dev/ttyUSB'+str(i),9600)
 			print ('/dev/ttyUSB'+str(i))
@@ -25,6 +26,7 @@ def tryConnect():
 			return newSer
 		except (serial.serialutil.SerialException):
 			pass
+			"""
 	for i in range(0,9):
 		try:
 			newSer=serial.Serial('/dev/ttyACM'+str(i),9600)
@@ -39,10 +41,35 @@ def tryConnect():
 	time.sleep (1)
 	return 0
 
+def tryConnect2():
+	newSer=0
+	for i in range(0,9):
+		try:
+			newSer=serial.Serial('/dev/ttyUSB'+str(i),9600)
+			print ('/dev/ttyUSB'+str(i))
+
+			return newSer
+		except (serial.serialutil.SerialException):
+			pass
+	print ("Arduino not connected")
+	time.sleep (1)
+	return 0
+
 class ArduinoReader(Thread):
 	def __init__(self,MainUnit):
 		Thread.__init__(self)
 		self.MainUnit=MainUnit
+		self.ser2=tryConnect2()
+	def on(self):
+		try:		
+			self.ser2.write("b")
+		except (serial.serialutil.SerialException,AttributeError):
+			self.ser2=tryConnect2()
+	def off(self):
+		try:
+			self.ser2.write("a")
+		except (serial.serialutil.SerialException,AttributeError):
+			self.ser2=tryConnect2()
 	def run(self):
 
 		ser=tryConnect()
@@ -82,6 +109,12 @@ class ArduinoReader(Thread):
 							self.MainUnit.entered()
 						elif (input=="f\r\n"):
 							self.MainUnit.left();
+
+						elif (input=="i\r\n"):
+							self.MainUnit.LampOn();
+
+						elif (input=="j\r\n"):
+							self.MainUnit.LampOff();
 			except (Exception):
 				print (str(Exception))
 				ser=tryConnect()

@@ -77,10 +77,7 @@
                 socket.emit('mediabuttonevent', {data:  "louder"});
                 return false;
             });
-            $('form#mediabuttonlower').submit(function(event) {
-                socket.emit('mediabuttonevent', {data:  "lower"});
-                return false;
-            });
+
         });
 
         function buttonlower(form) {
@@ -101,6 +98,14 @@
         }
         function buttonplaypause(form) {
             socket.emit('mediabuttonevent', {data:  "playpause"});
+            return false;
+        }
+		function LampOn(form) {
+            socket.emit('mediabuttonevent', {data:  "LampOn"});
+            return false;
+        }
+		function LampOff(form) {
+            socket.emit('mediabuttonevent', {data:  "LampOff"});
             return false;
         }
     </SCRIPT>
@@ -216,6 +221,10 @@
             <button class="btn btn-info btn-lg " TYPE="button" NAME="button"   onClick="buttonnext(this.form)"> <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></button>
             <button class="btn btn-info btn-lg " TYPE="button" NAME="button"   onClick="buttonlower(this.form)"> <span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span></button>
             <button class="btn btn-info btn-lg " TYPE="button" NAME="button"   onClick="buttonlouder(this.form)"> <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span></button>
+
+            <button class="btn btn-info btn-lg " TYPE="button" NAME="button"   onClick="LampOn(this.form)"> <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+
+            <button class="btn btn-info btn-lg " TYPE="button" NAME="button"   onClick="LampOff(this.form)"> <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
         </div>
         <div class="content__middle"  style=" height:auto; border:1px ridge black;">
             <div id="progress-bar" style="
@@ -241,6 +250,7 @@
             </div>
         </div>
     </div>
+
     <div id="lightdisplay" style="background: burlywood; color: darkblue" class="text-center"></div>
     <div class="container"  style="height: 300px ;overflow: auto; ">
         <div id="log" >
